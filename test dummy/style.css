@@ -1,0 +1,150 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+main {
+    width: 350px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+form {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+form input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    outline: none;
+    font-size: 1em;
+}
+
+form button {
+    padding: 15px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
+}
+
+form button i {
+    font-size: 1.2em;
+}
+
+.result {
+    padding: 20px;
+    text-align: center;
+}
+
+.name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.temperature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.temperature img {
+    width: 80px;
+}
+
+.temperature figcaption {
+    display: flex;
+    align-items: baseline;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.description {
+    font-size: 1.1em;
+    color: #666;
+}
+
+ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+li {
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+li i {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.dynamic-height {
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-height::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #007BFF, #007BFF);
+    z-index: 1;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+body.light {
+    --main-bg-color: #f7f7f7;
+    --text-color: #000;
+}
+
+body.dark {
+    --main-bg-color: #333;
+    --text-color: #fff;
+}
+
+.error {
+    animation: shake 0.3s linear 1;
+}
+
+@keyframes shake {
+    0% { transform: translateX(10px); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}

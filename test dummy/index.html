@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <div id="border">
+            <!-- Search Bar -->
+            <form>
+                <input type="text" id="name" placeholder="Enter city name" autocomplete="off">
+                <button>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+
+            <section class="result">
+                <figure class="name">
+                    <figcaption>India</figcaption> 
+                    <img src="https://flagsapi.com/IN/shiny/32.png" alt="Country Flag">
+                </figure>
+    
+                <figure class="temperature">
+                    <img src="https://openweathermap.org/img/wn/10d@4x.png" alt="Weather Icon">
+                    <figcaption>
+                        <span>31</span>
+                        <sup>o</sup>
+                        <span>C</span>
+                    </figcaption> 
+                </figure>
+                <p class="description">overcast clouds</p>
+                <ul>
+                    <li class="dynamic-height">
+                        <span>Clouds</span>
+                        <i class="fa-solid fa-cloud"></i>
+                        <span id="clouds">50</span>%
+                    </li>
+                    <li class="dynamic-height">
+                        <span>Humidity</span>
+                        <i class="fa-solid fa-droplet"></i>
+                        <span id="humidity">50</span>%
+                    </li>
+                    <li class="dynamic-height">
+                        <span>Pressure</span>
+                        <i class="fa-solid fa-gauge"></i>
+                        <span id="pressure">1000</span>hPa
+                    </li>
+                    <li>
+                        <span>AQI</span>
+                        <i class="fa-solid fa-wind"></i>
+                        <span id="aqi">-</span>
+                    </li>
+                    <li>
+                        <span>Main Pollutant</span>
+                        <i class="fa-solid fa-smog"></i>
+                        <span id="main-pollutant">-</span>
+                    </li>
+                    <li>
+                        <span>Sunrise</span>
+                        <i class="fa-solid fa-sun"></i>
+                        <span id="sunrise">-</span>
+                    </li>
+                    <li>
+                        <span>Sunset</span>
+                        <i class="fa-solid fa-moon"></i>
+                        <span id="sunset">-</span>
+                    </li>
+                    <li>
+                        <span>Local Time</span>
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="local-time">-</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
