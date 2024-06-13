@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <main>
+<body >
+    <header>
+        <h1>Weather</h1>
+    </header>
+    <main id="main">
         <div id="border">
             <!-- Search Bar -->
             <form>
@@ -71,15 +77,25 @@
                         <span id="sunset">17:00</span>
                     </li>
                     <li>
-                        
                         <span>Local Time</span>
                         <i class="fa-solid fa-clock"></i>
                         <span id="local-time">-</span>
+                    </li>
+                    <li id="weather-alert" class="dynamic-height">
+                        <span>Alert</span>
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <span id="alert-description">No</span>
+                    </li>
+                    <li id="rain-probability" class="dynamic-height">
+                        <span>Rain Probability</span>
+                        <i class="fa-solid fa-cloud-rain"></i>
+                        <span id="rain-prob">-</span>%
                     </li>
                 </ul>
             </section>
         </div>
     </main>
+    <footer>Made By ............. </footer>
     <script src="app.js"></script>
 </body>
 </html>

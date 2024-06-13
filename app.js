@@ -1,5 +1,6 @@
-let id = '9505fd1df737e20152fbd78cdb289b6a';
-let url = 'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=' + id;
+let apiKey = '9505fd1df737e20152fbd78cdb289b6a';
+let weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=' + apiKey;
+let oneCallUrl = 'https://api.openweathermap.org/data/2.5/onecall?units=metric&exclude=minutely,hourly&appid=' + apiKey;
 let city = document.querySelector('.name');
 let form = document.querySelector("form");
 let temperature = document.querySelector('.temperature');
@@ -9,11 +10,72 @@ let clouds = document.getElementById('clouds');
 let humidity = document.getElementById('humidity');
 let pressure = document.getElementById('pressure');
 let main = document.querySelector('main');
+let weatherAlert = document.getElementById('alert-description');
+let rainProbability = document.getElementById('rain-prob');
+
+// Weather description to background color mapping
+const weatherToColor = {
+    "clear sky": "#f7e9a0",
+    "sunny": "#ffeb3b",
+    "partly cloudy": "#ffe0b2",
+    "few clouds": "#fde0b4",
+    "mostly cloudy": "#cfd8dc",
+    "overcast clouds": "#90a4ae",
+    "scattered clouds": "#80a6ae",
+    "light rain": "#b3e5fc",
+    "moderate rain": "#64b5f6",
+    "heavy rain": "#2196f3",
+    "showers": "#03a9f4",
+    "drizzle": "#b3e5fc",
+    "thunderstorms": "#d32f2f",
+    "rain and snow": "#80cbc4",
+    "light snow": "#e0f7fa",
+    "moderate snow": "#b2ebf2",
+    "heavy snow": "#80deea",
+    "snow showers": "#4dd0e1",
+    "sleet": "#26c6da",
+    "blowing snow": "#00acc1",
+    "hail": "#006064",
+    "small hail": "#00838f",
+    "large hail": "#00bcd4",
+    "fog": "#cfd8dc",
+    "mist": "#eceff1",
+    "freezing fog": "#b0bec5",
+    "breezy": "#ffcc80",
+    "windy": "#ffb74d",
+    "strong winds": "#ffa726",
+    "hurricane": "#ef5350",
+    "tornado": "#e53935",
+    "smoke": "#8d6e63",
+    "haze": "#bdbdbd",
+    "dust": "#d7ccc8",
+    "sandstorm": "#bcaaa4",
+    "ash": "#a1887f",
+    "squalls": "#7b1fa2",
+    "extreme heat": "#f4511e",
+    "extreme cold": "#3f51b5",
+    "blizzards": "#5c6bc0",
+    "ice storms": "#7986cb",
+    "severe thunderstorms": "#d32f2f",
+    "tropical storms": "#388e3c",
+    "cyclones": "#7cb342",
+    "typhoons": "#8bc34a",
+    "freezing rain": "#03a9f4",
+    "rain and hail": "#00acc1",
+    "wintry mix": "#4dd0e1",
+    "frost": "#b0bec5",
+    "frost and fog": "#90a4ae"
+};
 
 // Function to fetch weather data
 const searchWeather = () => {
-    fetch(url + '&q=' + valueSearch.value)
-        .then(response => response.json())
+    fetch(weatherUrl + '&q=' + valueSearch.value)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log(data);
             if (data.cod == 200) {
@@ -42,6 +104,13 @@ const searchWeather = () => {
 
                 // Update local time
                 updateLocalTime(data.dt, data.timezone);
+
+                // Update background color
+                updateBackgroundColor(data.weather[0].description);
+
+                // Fetch and display weather alerts and rain probability
+                fetchWeatherAlerts(data.coord.lat, data.coord.lon);
+
             } else {
                 // Show error message if city not found
                 main.classList.add('error');
@@ -51,6 +120,35 @@ const searchWeather = () => {
             }
             // Clear input field
             valueSearch.value = '';
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+// Function to fetch and display weather alerts and rain probability
+const fetchWeatherAlerts = (lat, lon) => {
+    fetch(`${oneCallUrl}&lat=${lat}&lon=${lon}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.alerts && data.alerts.length > 0) {
+                weatherAlert.innerText = data.alerts[0].event;
+            } else {
+                weatherAlert.innerText = 'No alerts';
+            }
+            if (data.daily && data.daily.length > 0) {
+                rainProbability.innerText = (data.daily[0].pop * 100).toFixed(2) + '%';
+            } else {
+                rainProbability.innerText = 'No data';
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
         });
 }
 
@@ -62,9 +160,14 @@ const updateWeatherIcon = (iconCode) => {
 
 // Function to fetch and display AQI data
 const fetchAQI = (lat, lon) => {
-    let aqiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${id}`;
+    let aqiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
     fetch(aqiUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             const aqi = data.list[0].main.aqi;
             document.getElementById('aqi').innerText = aqi;
@@ -75,6 +178,9 @@ const fetchAQI = (lat, lon) => {
             } else {
                 document.getElementById('main-pollutant').innerText = '-';
             }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
         });
 }
 
@@ -89,7 +195,7 @@ const addSunriseSunset = (sunriseTimestamp, sunsetTimestamp, timezone) => {
 // Function to format time
 const formatTime = (timestamp, timezone) => {
     let date = new Date((timestamp + timezone) * 1000);
-    return `${('0' + date.getUTCHours()).slice(-2)}:${('40' + date.getUTCMinutes()).slice(-2)}`;
+    return `${('0' + date.getUTCHours()).slice(-2)}:${('0' + date.getUTCMinutes()).slice(-2)}`;
 }
 
 // Function to update local time
@@ -98,20 +204,25 @@ const updateLocalTime = (timestamp, timezone) => {
     document.getElementById('local-time').innerText = localTime;
 }
 
-// Function to adjust the heights of the boxes based on their values
+// Function to adjust box heights
 const adjustBoxHeights = () => {
-    let boxes = document.querySelectorAll('.dynamic-height');
+    let boxes = document.querySelectorAll('.box');
+    let maxHeight = 0;
     boxes.forEach(box => {
-        let value = box.querySelector('span:last-child').innerText.replace('%', '').replace('hPa', '');
-        if (!isNaN(value) && value != '-') {
-            value = parseFloat(value);
-            box.style.backgroundImage = `linear-gradient(to bottom, transparent ${100 - value}%, #0003 ${100 - value}%)`;
-        }
+        box.style.height = 'auto';
+        maxHeight = Math.max(maxHeight, box.offsetHeight);
     });
+    boxes.forEach(box => box.style.height = maxHeight + 'px');
 }
 
-// Event listener for form submission
-form.addEventListener("submit", (e) => {
+// Function to update background color based on weather description
+const updateBackgroundColor = (description) => {
+    let bgColor = weatherToColor[description.toLowerCase()] || '#ffffff';
+    main.style.backgroundColor = bgColor;
+}
+
+// Add event listener to the form
+form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (valueSearch.value != '') {
         searchWeather();
